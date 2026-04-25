@@ -206,6 +206,7 @@ textarea.form-input{resize:vertical;min-height:90px}
   transition:border-color .2s;
 }
 .invoice-row:hover{border-color:var(--border2)}
+.invoice-row.inv-row-active{border-color:var(--cobalt);background:rgba(22,104,211,.06)}
 .invoice-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--cobalt);width:90px;flex-shrink:0}
 .invoice-client{font-size:13px;font-weight:500;color:var(--white);flex:1}
 .invoice-amount{font-family:'Playfair Display',serif;font-size:18px;color:var(--sky);width:130px;text-align:right;flex-shrink:0}
@@ -273,6 +274,153 @@ textarea.form-input{resize:vertical;min-height:90px}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ══════════════════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════════════════ */
+
+/* Hamburger button */
+.hamburger{display:none;background:none;border:none;color:var(--fog);cursor:pointer;padding:6px;flex-direction:column;gap:4px;flex-shrink:0}
+.hamburger span{display:block;width:18px;height:1.5px;background:currentColor;transition:all .25s}
+.hamburger:hover{color:var(--ice)}
+
+/* Mobile sidebar overlay */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(7,15,30,.7);z-index:199;backdrop-filter:blur(2px)}
+.sidebar-overlay.open{display:block}
+
+@media(max-width:768px){
+  /* Body: allow scroll on mobile */
+  html,body{overflow:auto;height:auto}
+
+  /* Login box */
+  .login-box{width:calc(100vw - 40px);padding:32px 24px}
+
+  /* App shell: stack vertically */
+  #app{flex-direction:column;height:auto;min-height:100vh}
+
+  /* Sidebar: slide-in drawer */
+  #sidebar{
+    position:fixed;top:0;left:0;bottom:0;z-index:200;
+    transform:translateX(-100%);transition:transform .28s ease;
+    width:240px;min-width:240px;
+  }
+  #sidebar.mob-open{transform:translateX(0)}
+
+  /* Main: full width */
+  #main{width:100%;flex:1;display:flex;flex-direction:column;overflow:visible}
+
+  /* Topbar */
+  .topbar{padding:0 16px;height:52px}
+  .topbar-title{font-size:16px}
+  .hamburger{display:flex}
+
+  /* Content */
+  .content{padding:16px;overflow-y:visible}
+
+  /* KPI grid: 2 cols on mobile */
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi-val{font-size:26px}
+
+  /* Dashboard: single col */
+  .dash-grid{grid-template-columns:1fr}
+
+  /* Table: horizontal scroll */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:560px}
+
+  /* Kanban: horizontal scroll */
+  .kanban{grid-template-columns:repeat(5,220px);overflow-x:auto;padding-bottom:12px;-webkit-overflow-scrolling:touch}
+
+  /* Notes: stack list + editor */
+  .notes-layout{grid-template-columns:1fr;height:auto}
+  .notes-list{border-right:none;border-bottom:1px solid var(--border);max-height:200px}
+  .notes-editor{min-height:320px}
+
+  /* Invoice list: compact */
+  .invoice-row{flex-wrap:wrap;gap:8px;padding:14px 14px}
+  .invoice-num{width:auto}
+  .invoice-amount{width:auto}
+  .invoice-date{width:auto}
+  .invoice-client{min-width:100%}
+  .invoice-actions{width:100%;justify-content:flex-end}
+
+  /* Modals: full screen on mobile */
+  .modal,.modal-wide{width:100% !important;max-width:100% !important;max-height:100vh;border-radius:0;margin:0}
+  .modal-overlay{align-items:flex-end}
+  .modal-overlay.open .modal{animation:slideUp .25s ease}
+  @keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+  /* Grid-2 forms: single col */
+  .grid-2{grid-template-columns:1fr}
+
+  /* Sync indicator: label hidden */
+  #syncLabel{display:none}
+
+  /* Toast: full width bottom */
+  #toast{left:16px;right:16px;bottom:16px;text-align:center}
+
+  /* Email modal textarea */
+  .email-textarea{min-height:140px}
+}
+
+@media(max-width:480px){
+  .kpi-grid{grid-template-columns:1fr}
+  .kpi{padding:16px 14px}
+  .login-box{padding:28px 18px}
+  .content{padding:12px}
+  .topbar{padding:0 12px}
+}
+
+/* ══════════════════════════════════════
+   LIVE INVOICE PREVIEW PANEL
+══════════════════════════════════════ */
+.inv-preview-wrap{display:grid;grid-template-columns:1fr 380px;gap:16px;align-items:start}
+.inv-preview-panel{
+  background:#fff;color:#111;
+  border:1px solid rgba(54,130,220,.15);
+  position:sticky;top:0;font-family:'Outfit',sans-serif;
+  box-shadow:0 4px 32px rgba(0,0,0,.4);
+  font-size:12px;
+}
+.inv-preview-header{background:#0D2D5E;padding:18px 20px;display:flex;justify-content:space-between;align-items:flex-start}
+.inv-preview-co{color:#b8965a;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;font-weight:600}
+.inv-preview-co-sub{color:rgba(255,255,255,.45);font-size:10px;margin-top:3px;letter-spacing:.04em}
+.inv-preview-label{text-align:right}
+.inv-preview-word{color:#fff;font-size:18px;font-weight:700;letter-spacing:.08em}
+.inv-preview-num{color:#b8965a;font-family:'DM Mono',monospace;font-size:10px;margin-top:3px}
+.inv-preview-body{padding:16px 20px}
+.inv-preview-parties{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.inv-preview-pty-lbl{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#b8965a;margin-bottom:4px}
+.inv-preview-pty-name{font-size:13px;font-weight:600;color:#0D2D5E;line-height:1.3}
+.inv-preview-pty-detail{font-size:10px;color:#666;margin-top:2px;line-height:1.6}
+.inv-preview-meta{display:flex;gap:0;border:1px solid #e8e8e8;margin-bottom:14px}
+.inv-preview-meta-item{flex:1;padding:8px 10px;border-right:1px solid #e8e8e8}
+.inv-preview-meta-item:last-child{border-right:none}
+.inv-preview-meta-lbl{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:#b8965a}
+.inv-preview-meta-val{font-size:11px;font-weight:600;color:#0D2D5E;margin-top:2px}
+.inv-preview-table{width:100%;border-collapse:collapse;margin-bottom:12px}
+.inv-preview-table th{background:#0D2D5E;color:#b8965a;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:6px 8px;text-align:left}
+.inv-preview-table th:last-child,.inv-preview-table td:last-child{text-align:right}
+.inv-preview-table td{padding:7px 8px;border-bottom:1px solid #f0f0f0;font-size:11px;color:#333}
+.inv-preview-table tr:nth-child(even) td{background:#fafafa}
+.inv-preview-table .no-items td{text-align:center;color:#aaa;font-style:italic;padding:16px}
+.inv-preview-totals{display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-bottom:12px}
+.inv-preview-tot-row{display:flex;gap:32px;font-size:11px;color:#555;font-family:'DM Mono',monospace}
+.inv-preview-tot-row.grand{font-size:14px;font-weight:700;color:#0D2D5E;padding-top:6px;border-top:2px solid #0D2D5E;margin-top:2px}
+.inv-preview-tot-row.grand span:last-child{color:#1668D3}
+.inv-preview-notes{background:#f8f8f8;border-left:3px solid #b8965a;padding:8px 10px;font-size:10px;color:#555;font-style:italic;line-height:1.6;margin-bottom:12px}
+.inv-preview-footer{background:#0D2D5E;padding:10px 20px;font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.06em}
+.inv-preview-badge{display:inline-block;padding:2px 8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;font-weight:600;margin-bottom:6px}
+.inv-preview-badge.draft{background:#eee;color:#888}
+.inv-preview-badge.sent{background:#dbeafe;color:#1668D3}
+.inv-preview-badge.paid{background:#d1fae5;color:#065f46}
+.inv-preview-badge.overdue{background:#fee2e2;color:#991b1b}
+
+/* Hide preview panel on mobile — use modal instead */
+@media(max-width:900px){
+  .inv-preview-wrap{grid-template-columns:1fr}
+  .inv-preview-panel{display:none}
+}
 
 /* ── SYNC DOT PULSE ── */
 @keyframes syncPulse{0%,100%{box-shadow:0 0 0 0 rgba(2,195,154,.5)}50%{box-shadow:0 0 0 5px rgba(2,195,154,0)}}
@@ -354,6 +502,7 @@ textarea.form-input{resize:vertical;min-height:90px}
 
 <!-- ── APP ── -->
 <div id="app">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
   <div id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-brand">Watrix CRM</div>
@@ -391,6 +540,9 @@ textarea.form-input{resize:vertical;min-height:90px}
 
   <div id="main">
     <div class="topbar">
+      <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
       <div class="topbar-title" id="topbarTitle">Dashboard</div>
       <div class="topbar-actions" id="topbarActions">
         <div id="syncIndicator" style="display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--fog)">
@@ -480,7 +632,66 @@ textarea.form-input{resize:vertical;min-height:90px}
 
       <!-- ═══ INVOICES ═══ -->
       <div class="panel" id="panel-invoices">
-        <div class="invoice-list" id="invoiceList"></div>
+        <div class="inv-preview-wrap">
+          <div class="invoice-list" id="invoiceList"></div>
+          <!-- LIVE INVOICE PREVIEW -->
+          <div class="inv-preview-panel" id="invPreviewPanel">
+            <div class="inv-preview-header">
+              <div>
+                <div class="inv-preview-co">WATRIX CONSULTING</div>
+                <div class="inv-preview-co-sub">Water Engineering Consultancy · Karachi</div>
+              </div>
+              <div class="inv-preview-label">
+                <div class="inv-preview-word">INVOICE</div>
+                <div class="inv-preview-num" id="pvNum">—</div>
+              </div>
+            </div>
+            <div class="inv-preview-body">
+              <div style="margin-bottom:8px"><span class="inv-preview-badge draft" id="pvBadge">DRAFT</span></div>
+              <div class="inv-preview-parties">
+                <div>
+                  <div class="inv-preview-pty-lbl">From</div>
+                  <div class="inv-preview-pty-name">Watrix Consulting</div>
+                  <div class="inv-preview-pty-detail">info.watrix@gmail.com<br>+92 333 607 6231<br>Karachi, Pakistan</div>
+                </div>
+                <div>
+                  <div class="inv-preview-pty-lbl">Bill To</div>
+                  <div class="inv-preview-pty-name" id="pvClient">—</div>
+                  <div class="inv-preview-pty-detail" id="pvEmail"></div>
+                </div>
+              </div>
+              <div class="inv-preview-meta">
+                <div class="inv-preview-meta-item">
+                  <div class="inv-preview-meta-lbl">Date</div>
+                  <div class="inv-preview-meta-val" id="pvDate">—</div>
+                </div>
+                <div class="inv-preview-meta-item">
+                  <div class="inv-preview-meta-lbl">Due</div>
+                  <div class="inv-preview-meta-val" id="pvDue">—</div>
+                </div>
+                <div class="inv-preview-meta-item">
+                  <div class="inv-preview-meta-lbl">Currency</div>
+                  <div class="inv-preview-meta-val">PKR</div>
+                </div>
+              </div>
+              <table class="inv-preview-table">
+                <thead>
+                  <tr><th>Description</th><th>Qty</th><th>Total</th></tr>
+                </thead>
+                <tbody id="pvLineItems">
+                  <tr class="no-items"><td colspan="3">Select an invoice to preview</td></tr>
+                </tbody>
+              </table>
+              <div class="inv-preview-totals">
+                <div class="inv-preview-tot-row"><span>Subtotal</span><span id="pvSubtotal">PKR —</span></div>
+                <div class="inv-preview-tot-row" id="pvTaxRow" style="display:none"><span id="pvTaxLabel">Tax</span><span id="pvTax">—</span></div>
+                <div class="inv-preview-tot-row grand"><span>Total Due</span><span id="pvTotal">PKR —</span></div>
+              </div>
+              <div class="inv-preview-notes" id="pvNotes" style="display:none"></div>
+            </div>
+            <div class="inv-preview-footer" id="pvFooter">Watrix Consulting · info.watrix@gmail.com · +92 333 607 6231</div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -1248,7 +1459,7 @@ function renderInvoices() {
   }
   const statusColor = {Draft:var2('fog'),Sent:var2('sky'),Paid:var2('mint'),Overdue:var2('red')};
   list.innerHTML = invoices.map(inv=>`
-    <div class="invoice-row">
+    <div class="invoice-row" data-id="${inv.id}" onclick="previewInvoice('${inv.id}')" style="cursor:pointer">
       <div class="invoice-num">${inv.number}</div>
       <div>
         <div class="invoice-client">${inv.client}</div>
@@ -1258,7 +1469,7 @@ function renderInvoices() {
       <span class="badge" style="background:rgba(0,0,0,.2);color:${statusColor[inv.status]||'#fff'};border:1px solid ${statusColor[inv.status]||'#fff'}33">${inv.status}</span>
       <div class="invoice-amount">${fmtPKR(inv.total)}</div>
       <div class="invoice-date">${inv.date||''}</div>
-      <div class="invoice-actions">
+      <div class="invoice-actions" onclick="event.stopPropagation()">
         <button class="action-btn" onclick="openInvoiceModal('${inv.id}')" title="Edit">✎</button>
         <button class="action-btn" onclick="generateInvoicePDF('${inv.id}')" title="Download PDF" style="color:var(--amber)">⬇ PDF</button>
         <button class="action-btn" onclick="openEmailModal('${inv.id}')" title="Send via Gmail" style="color:#ea4335">✉ Email</button>
@@ -1266,6 +1477,11 @@ function renderInvoices() {
         <button class="action-btn" onclick="deleteInvoice('${inv.id}')" title="Delete" style="color:rgba(224,82,82,.5)">✕</button>
       </div>
     </div>`).join('');
+
+  // Auto-preview the first invoice (or re-preview the last selected one)
+  const toPreview = _previewInvId && invoices.find(x=>x.id===_previewInvId)
+    ? _previewInvId : invoices[0]?.id;
+  if (toPreview) previewInvoice(toPreview);
 }
 
 function openInvoiceModal(id=null) {
@@ -1357,6 +1573,7 @@ function saveInvoice() {
   }
   save(); closeInvoiceModal(); renderInvoices();
   showToast('Invoice saved');
+  setTimeout(() => previewInvoice(inv.id), 50);
 }
 
 function saveAndPrintInvoice() {
@@ -1366,7 +1583,7 @@ function saveAndPrintInvoice() {
   if (editingInvoiceId) { invoices[invoices.findIndex(x=>x.id===editingInvoiceId)] = inv; }
   else { invoices.unshift(inv); editingInvoiceId = inv.id; }
   save(); closeInvoiceModal(); renderInvoices();
-  setTimeout(() => printInvoice(inv.id), 200);
+  setTimeout(() => { previewInvoice(inv.id); printInvoice(inv.id); }, 200);
 }
 
 function deleteInvoice(id) {
@@ -1745,7 +1962,89 @@ function saveAndEmailInvoice() {
 }
 
 // ═══════════════════════════════════════════════
-// UTILS
+// MOBILE SIDEBAR TOGGLE
+// ═══════════════════════════════════════════════
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  const open = sb.classList.toggle('mob-open');
+  ov.classList.toggle('open', open);
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('mob-open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+// Close sidebar when nav item clicked on mobile
+document.querySelectorAll('.nav-item').forEach(el => {
+  el.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
+});
+
+// ═══════════════════════════════════════════════
+// LIVE INVOICE PREVIEW
+// ═══════════════════════════════════════════════
+let _previewInvId = null;
+
+function previewInvoice(id) {
+  const inv = invoices.find(x => x.id === id);
+  if (!inv) return;
+  _previewInvId = id;
+
+  // Highlight active row
+  document.querySelectorAll('.invoice-row').forEach(r => r.classList.remove('inv-row-active'));
+  const activeRow = document.querySelector(`.invoice-row[data-id="${id}"]`);
+  if (activeRow) activeRow.classList.add('inv-row-active');
+
+  // Badge
+  const badgeEl = document.getElementById('pvBadge');
+  const badgeMap = { Draft:'draft', Sent:'sent', Paid:'paid', Overdue:'overdue' };
+  badgeEl.className = 'inv-preview-badge ' + (badgeMap[inv.status] || 'draft');
+  badgeEl.textContent = (inv.status || 'DRAFT').toUpperCase();
+
+  // Header
+  document.getElementById('pvNum').textContent = inv.number || '—';
+
+  // Parties
+  document.getElementById('pvClient').textContent = inv.client || '—';
+  document.getElementById('pvEmail').textContent  = inv.email  || '';
+
+  // Meta
+  document.getElementById('pvDate').textContent = inv.date || '—';
+  document.getElementById('pvDue').textContent  = inv.due  || '—';
+
+  // Line items
+  const tbody = document.getElementById('pvLineItems');
+  if (inv.lineItems && inv.lineItems.length) {
+    tbody.innerHTML = inv.lineItems.map(li => `
+      <tr>
+        <td>${li.desc || '—'}</td>
+        <td style="text-align:center">${li.qty}</td>
+        <td>PKR ${Number(li.qty * li.price).toLocaleString()}</td>
+      </tr>`).join('');
+  } else {
+    tbody.innerHTML = '<tr class="no-items"><td colspan="3">No line items</td></tr>';
+  }
+
+  // Totals
+  const sub = Number(inv.subtotal) || 0;
+  document.getElementById('pvSubtotal').textContent = 'PKR ' + sub.toLocaleString();
+
+  if (inv.tax && Number(inv.tax) > 0) {
+    const taxAmt = Math.round(sub * Number(inv.tax) / 100);
+    document.getElementById('pvTaxRow').style.display = 'flex';
+    document.getElementById('pvTaxLabel').textContent = `Tax (${inv.tax}%)`;
+    document.getElementById('pvTax').textContent = 'PKR ' + taxAmt.toLocaleString();
+  } else {
+    document.getElementById('pvTaxRow').style.display = 'none';
+  }
+  document.getElementById('pvTotal').textContent = 'PKR ' + (Number(inv.total) || 0).toLocaleString();
+
+  // Notes
+  const notesEl = document.getElementById('pvNotes');
+  if (inv.notes) { notesEl.style.display = 'block'; notesEl.textContent = inv.notes; }
+  else { notesEl.style.display = 'none'; }
+}
 // ═══════════════════════════════════════════════
 function uid() { return Math.random().toString(36).slice(2,10)+Date.now().toString(36); }
 function today() { return new Date().toISOString().slice(0,10); }
